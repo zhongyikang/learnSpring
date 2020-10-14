@@ -72,12 +72,6 @@ public class JdbcTacoRepository implements TacoRepository {
         //通过psc和keyholder来update
         jdbc.update(psc, keyHolder);
         
-        if(keyHolder == null) {
-        	System.out.println("keyHolder is null! ");
-        } else
-        if(keyHolder.getKey() == null) {
-        	System.out.println("getKey() is null");
-        }
         //获取tacoId
         return keyHolder.getKey().longValue();
     }
