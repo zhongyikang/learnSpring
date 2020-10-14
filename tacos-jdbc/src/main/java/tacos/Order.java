@@ -4,20 +4,22 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
 
+//tag::newFields[]
 @Data
 public class Order {
   
   private Long id;
   
   private Date placedAt;
-
+  
+//end::newFields[]
 
   @NotBlank(message="Delivery name is required")
   private String deliveryName;
@@ -49,7 +51,14 @@ public class Order {
   public void addDesign(Taco design) {
     this.tacos.add(design);
   }
+  
+  /*
+// tag::newFields[]
+  ...
 
+// end::newFields[]
+   */
+//tag::newFields[]
 }
-
+//end::newFields[]
 
