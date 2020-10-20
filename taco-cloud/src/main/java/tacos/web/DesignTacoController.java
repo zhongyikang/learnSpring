@@ -1,7 +1,7 @@
 package tacos.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import lombok.extern.slf4j.Slf4j;
-
 import tacos.Taco;
 import tacos.data.IngredientRepository;
 import tacos.data.TacoRepository;
@@ -25,10 +23,10 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Order;
 
-@Slf4j //日志
+
 @Controller
 @RequestMapping("/design")
-@SessionAttributes("order")
+@SessionAttributes("order")//会把请求？响应？中的order属性放在session中。
 //若希望在多个请求之间共用数据，则可以在控制器类上标注一个
 //@SessionAttributes,配置需要在session中存放的数据范围，Spring MVC将存放在model中对应的数据暂存到HttpSession 中。
 public class DesignTacoController {
@@ -52,14 +50,7 @@ public class DesignTacoController {
     public String showDesignForm(Model model) {
     	ArrayList<Ingredient> ingredients = new ArrayList<>();
     	ingredientRepo.findAll().forEach(i -> ingredients.add(i));
-    	
-    	System.out.println("\n\n");
-    	for(int i = 0; i < ingredients.size(); i ++) {
-    		System.out.println(ingredients.get(i));
-    	}
-    	System.out.println("\n\n");
-    	
-    	
+  	
     	Type[] types = Ingredient.Type.values();
     	
     	for(Type type:types) { //存储了type的lowcase， value为具有特定ingredient的list
@@ -91,14 +82,12 @@ public class DesignTacoController {
 		
     	if(errors.hasErrors()) {
     		System.out.println("不会吧！");
-    		return "design"; //重新填写表单
+    		return "/design"; //重新填写表单
     	}
         
     	Taco saved = designRepo.save(design);
-    	System.out.println("\n\n我在这里哦1~\n\n");
-    	order.addDesign(saved);
+    	order.addDesign(saved); //Model中的属性。
     	
-    	System.out.println("\n\n我在这里哦2~\n\n");
     	/**
     	 * 思考这里的Model order？ 为什么不是直接创造一个， 把taco放在这个Order中？
     	 * 回答： 如果我只能订一次Taco， 那么， 我填写taco信息， 把taco保存， 然后创建一个order存入就行了。
@@ -106,7 +95,6 @@ public class DesignTacoController {
     	 * 
     	 */
     	
-        log.info("Processing design: " + design);
         return "redirect:/orders/current";
     }
 

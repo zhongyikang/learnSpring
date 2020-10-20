@@ -1,35 +1,38 @@
 package tacos;
 
+import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Bean;
 
-/**
- * SpringBoot主类
- * @author 钟益康
- *
- */
+import tacos.Ingredient.Type;
+import tacos.data.IngredientRepository;
+
 @SpringBootApplication
-/**
- * 这个注释是三个注释的集合：
- * 1. @SpringBootConfiguration 作为配置类，可以理解为@Configuration的特殊形式
- * 2. @EnableAutoConfiguration 启用自动配置
- * 3. @ComponentScan 启用组件扫描。
- * （扫描@Component、@Service、@Controller的组件，将注册为上下文中的bean）
- * 
- * @author 钟益康
- *
- */
-public class TacoCloudApplication implements WebMvcConfigurer{
+public class TacoCloudApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TacoCloudApplication.class, args);
-	}
-	
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("home");
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(TacoCloudApplication.class, args);
+  }
 
+  @Bean
+  public CommandLineRunner dataLoader(IngredientRepository repo) {
+    return new CommandLineRunner() {
+      @Override
+      public void run(String... args) throws Exception {
+        repo.save(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP));
+        repo.save(new Ingredient("COTO", "Corn Tortilla", Type.WRAP));
+        repo.save(new Ingredient("GRBF", "Ground Beef", Type.PROTEIN));
+        repo.save(new Ingredient("CARN", "Carnitas", Type.PROTEIN));
+        repo.save(new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES));
+        repo.save(new Ingredient("LETC", "Lettuce", Type.VEGGIES));
+        repo.save(new Ingredient("CHED", "Cheddar", Type.CHEESE));
+        repo.save(new Ingredient("JACK", "Monterrey Jack", Type.CHEESE));
+        repo.save(new Ingredient("SLSA", "Salsa", Type.SAUCE));
+        repo.save(new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
+      }
+    };
+  }
+  
 }
